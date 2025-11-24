@@ -92,15 +92,55 @@ const App = {
             // Fetch language statistics
             this.currentLanguages = await GitHubAPI.getAggregatedLanguages(username, this.currentRepos);
 
+            // Fetch user events for pattern analysis
+            let events = [];
+            try {
+                events = await GitHubAPI.getUserEvents(username);
+            } catch (e) {
+                console.log('Could not fetch events:', e);
+            }
+
+            // NEW: Calculate developer score
+            const developerScore = DeveloperScoring.calculateScore(
+                this.currentUser,
+                this.currentRepos,
+                this.currentStats,
+                this.currentLanguages,
+                events
+            );
+
+            // NEW: Generate career insights
+            const careerInsights = CareerInsights.generateInsights(
+                this.currentUser,
+                this.currentRepos,
+                this.currentLanguages,
+                developerScore,
+                this.currentStats
+            );
+
+            // NEW: Analyze contribution patterns
+            const contributionPatterns = ContributionPatterns.analyzePatterns(
+                this.currentRepos,
+                events
+            );
+
             // Display all data
             this.displayData();
 
-            // Store data for export
+            // NEW: Display enhanced features
+            UIEnhanced.displayDeveloperScore(developerScore);
+            UIEnhanced.displayCareerInsights(careerInsights);
+            UIEnhanced.displayContributionPatterns(contributionPatterns);
+
+            // Store data for export (include new data)
             Export.setData({
                 user: this.currentUser,
                 repos: this.currentRepos,
                 stats: this.currentStats,
-                languages: this.currentLanguages
+                languages: this.currentLanguages,
+                score: developerScore,
+                insights: careerInsights,
+                patterns: contributionPatterns
             });
 
             // Update URL

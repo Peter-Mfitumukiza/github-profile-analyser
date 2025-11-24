@@ -20,8 +20,8 @@ const Export = {
         const exportData = {
             metadata: {
                 exported_at: new Date().toISOString(),
-                version: '1.0.0',
-                source: 'GitHub Portfolio Analyzer'
+                version: '2.0.0',
+                source: 'GitHub Portfolio Analyzer - Enhanced Edition'
             },
             profile: {
                 username: this.currentData.user.login,
@@ -38,6 +38,30 @@ const Export = {
                 public_repos: this.currentData.user.public_repos,
                 public_gists: this.currentData.user.public_gists
             },
+            // NEW: Developer Score
+            developer_score: this.currentData.score ? {
+                overall: this.currentData.score.overall,
+                level: this.currentData.score.level,
+                percentile: this.currentData.score.percentile,
+                breakdown: this.currentData.score.breakdown,
+                badges: this.currentData.score.badges
+            } : null,
+            // NEW: Career Insights
+            career_insights: this.currentData.insights ? {
+                strengths: this.currentData.insights.strengths,
+                recommendations: this.currentData.insights.recommendations,
+                skill_gaps: this.currentData.insights.skillGaps,
+                career_path: this.currentData.insights.careerPath,
+                market_alignment: this.currentData.insights.marketAlignment
+            } : null,
+            // NEW: Contribution Patterns
+            contribution_patterns: this.currentData.patterns ? {
+                time_patterns: this.currentData.patterns.timePatterns,
+                commit_patterns: this.currentData.patterns.commitPatterns,
+                collaboration_style: this.currentData.patterns.collaborationStyle,
+                language_evolution: this.currentData.patterns.languageEvolution,
+                activity_trends: this.currentData.patterns.activityTrends
+            } : null,
             statistics: {
                 total_stars: this.currentData.stats.totalStars,
                 total_forks: this.currentData.stats.totalForks,
@@ -173,6 +197,9 @@ const Export = {
         const stats = this.currentData.stats;
         const languages = this.currentData.languages;
         const topRepos = this.currentData.repos.slice(0, 10);
+        const score = this.currentData.score;
+        const insights = this.currentData.insights;
+        const patterns = this.currentData.patterns;
 
         container.innerHTML = `
             <style>
@@ -185,10 +212,23 @@ const Export = {
                 .header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
                 .avatar { width: 100px; height: 100px; border-radius: 50%; }
                 .info { flex: 1; }
+                .score-section { background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0; }
+                .score-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+                .score-big { font-size: 48px; font-weight: bold; color: #6366f1; }
+                .score-level { font-size: 18px; color: #6b7280; }
+                .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
+                .score-item { text-align: center; }
+                .score-label { font-size: 11px; color: #6b7280; text-transform: uppercase; }
+                .score-value { font-size: 20px; font-weight: bold; color: #111827; }
+                .badge-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+                .badge { padding: 5px 10px; background: #e0e7ff; border-radius: 5px; font-size: 12px; }
                 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0; }
                 .stat-box { background: #f9fafb; padding: 15px; border-radius: 8px; text-align: center; }
                 .stat-value { font-size: 24px; font-weight: bold; color: #6366f1; }
                 .stat-label { font-size: 12px; color: #6b7280; text-transform: uppercase; }
+                .insights-box { background: #fef3c7; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #f59e0b; }
+                .recommendation-box { background: #dbeafe; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #3b82f6; }
+                .pattern-box { background: #ede9fe; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #8b5cf6; }
                 .language-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
                 .language-item { display: flex; align-items: center; gap: 10px; padding: 8px; background: #f9fafb; border-radius: 6px; }
                 .language-dot { width: 12px; height: 12px; border-radius: 50%; }
@@ -212,6 +252,80 @@ const Export = {
                 </div>
             </div>
 
+            ${score ? `
+                <h2>Developer Score</h2>
+                <div class="score-section">
+                    <div class="score-header">
+                        <div>
+                            <div class="score-big">${score.overall}/100</div>
+                            <div class="score-level">${score.level.name} Developer</div>
+                        </div>
+                        <div>
+                            <p><strong>Top ${100 - score.percentile}%</strong> of developers</p>
+                        </div>
+                    </div>
+                    <div class="score-grid">
+                        <div class="score-item">
+                            <div class="score-label">Impact</div>
+                            <div class="score-value">${score.breakdown.impact}</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">Expertise</div>
+                            <div class="score-value">${score.breakdown.expertise}</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">Consistency</div>
+                            <div class="score-value">${score.breakdown.consistency}</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">Quality</div>
+                            <div class="score-value">${score.breakdown.quality}</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="score-label">Growth</div>
+                            <div class="score-value">${score.breakdown.growth}</div>
+                        </div>
+                    </div>
+                    ${score.badges && score.badges.length > 0 ? `
+                        <div class="badge-list">
+                            ${score.badges.map(badge => `
+                                <div class="badge">${badge.icon} ${badge.name}</div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            ` : ''}
+
+            ${insights && insights.strengths && insights.strengths.length > 0 ? `
+                <h2>Key Strengths</h2>
+                ${insights.strengths.slice(0, 3).map(strength => `
+                    <div class="insights-box">
+                        <strong>${strength.title}</strong><br>
+                        <small>${strength.description}</small>
+                    </div>
+                `).join('')}
+            ` : ''}
+
+            ${insights && insights.recommendations && insights.recommendations.length > 0 ? `
+                <h2>Career Recommendations</h2>
+                ${insights.recommendations.slice(0, 3).map(rec => `
+                    <div class="recommendation-box">
+                        <strong>${rec.title}</strong><br>
+                        <small>${rec.description}</small>
+                    </div>
+                `).join('')}
+            ` : ''}
+
+            ${patterns && patterns.collaborationStyle ? `
+                <h2>Work Patterns</h2>
+                <div class="pattern-box">
+                    <p><strong>Collaboration Style:</strong> ${patterns.collaborationStyle.style}</p>
+                    <p><strong>Most Active Day:</strong> ${patterns.timePatterns?.mostActiveDay || 'N/A'}</p>
+                    <p><strong>Peak Coding Time:</strong> ${patterns.timePatterns?.mostActivePeriod || 'N/A'}</p>
+                    <p><strong>Weekend Activity:</strong> ${patterns.timePatterns?.weekendActivity || 0}%</p>
+                </div>
+            ` : ''}
+
             <h2>Portfolio Statistics</h2>
             <div class="stats-grid">
                 <div class="stat-box">
@@ -234,7 +348,7 @@ const Export = {
 
             <h2>Language Distribution</h2>
             <div class="language-list">
-                ${languages.map(lang => `
+                ${languages.slice(0, 8).map(lang => `
                     <div class="language-item">
                         <span class="language-dot" style="background: ${lang.color}"></span>
                         <span>${lang.name}</span>
@@ -245,7 +359,7 @@ const Export = {
 
             <h2>Top Repositories</h2>
             <div class="repo-list">
-                ${topRepos.map(repo => `
+                ${topRepos.slice(0, 6).map(repo => `
                     <div class="repo-item">
                         <div class="repo-name">${repo.name}</div>
                         <p>${repo.description || 'No description'}</p>
@@ -259,8 +373,8 @@ const Export = {
             </div>
 
             <div class="footer">
-                <p>Generated by GitHub Portfolio Analyzer • ${new Date().toLocaleDateString()}</p>
-                <p>github.com/${user.login}</p>
+                <p>Generated by GitHub Portfolio Analyzer Enhanced • ${new Date().toLocaleDateString()}</p>
+                <p>Developer Score: ${score ? score.overall : 'N/A'}/100 • github.com/${user.login}</p>
             </div>
         `;
 

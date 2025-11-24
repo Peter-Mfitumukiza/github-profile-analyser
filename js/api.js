@@ -1,13 +1,8 @@
-/* ===============================================
-   GITHUB API MODULE
-   =============================================== */
-
 const GitHubAPI = {
     baseURL: 'https://api.github.com',
     cache: new Map(),
-    cacheExpiry: 15 * 60 * 1000, // 15 minutes
+    cacheExpiry: 15 * 60 * 1000,
 
-    // Check cache for stored data
     checkCache(key) {
         const cached = this.cache.get(key);
         if (cached && Date.now() - cached.timestamp < this.cacheExpiry) {
@@ -17,7 +12,6 @@ const GitHubAPI = {
         return null;
     },
 
-    // Store data in cache
     setCache(key, data) {
         this.cache.set(key, {
             data,
@@ -25,7 +19,6 @@ const GitHubAPI = {
         });
     },
 
-    // Make API request with error handling
     async makeRequest(endpoint) {
         const cacheKey = endpoint;
         const cachedData = this.checkCache(cacheKey);
@@ -41,7 +34,6 @@ const GitHubAPI = {
                 }
             });
 
-            // Update rate limit display
             const remaining = response.headers.get('X-RateLimit-Remaining');
             const limit = response.headers.get('X-RateLimit-Limit');
             if (remaining && limit) {
@@ -67,12 +59,10 @@ const GitHubAPI = {
         }
     },
 
-    // Fetch user profile
     async getUser(username) {
         return this.makeRequest(`/users/${username}`);
     },
 
-    // Fetch user repositories
     async getUserRepos(username, perPage = 100) {
         const repos = [];
         let page = 1;
@@ -84,24 +74,20 @@ const GitHubAPI = {
             hasMore = data.length === perPage;
             page++;
 
-            // Limit to 300 repos to avoid too many API calls
             if (repos.length >= 300) break;
         }
 
         return repos;
     },
 
-    // Fetch repository languages
     async getRepoLanguages(owner, repo) {
         return this.makeRequest(`/repos/${owner}/${repo}/languages`);
     },
 
-    // Fetch user events
     async getUserEvents(username) {
         return this.makeRequest(`/users/${username}/events/public?per_page=30`);
     },
 
-    // Aggregate language statistics from all repositories
     async getAggregatedLanguages(username, repos) {
         const languageStats = {};
         const languageColors = {
@@ -126,15 +112,12 @@ const GitHubAPI = {
             'Default': '#6b7280'
         };
 
-        // Process only repos with languages
         const reposWithLanguages = repos.filter(repo => repo.language);
 
-        // Sample repos to avoid too many API calls (take top 30 by stars)
         const topRepos = reposWithLanguages
             .sort((a, b) => b.stargazers_count - a.stargazers_count)
             .slice(0, 30);
 
-        // Fetch language data for each repository
         for (const repo of topRepos) {
             try {
                 const languages = await this.getRepoLanguages(username, repo.name);
@@ -156,20 +139,17 @@ const GitHubAPI = {
             }
         }
 
-        // Calculate percentages
         const totalBytes = Object.values(languageStats).reduce((sum, lang) => sum + lang.bytes, 0);
 
         for (const lang of Object.values(languageStats)) {
             lang.percentage = ((lang.bytes / totalBytes) * 100).toFixed(1);
         }
 
-        // Sort by bytes and return top languages
         return Object.values(languageStats)
             .sort((a, b) => b.bytes - a.bytes)
             .slice(0, 10);
     },
 
-    // Calculate repository statistics
     calculateStats(repos) {
         const stats = {
             totalStars: 0,
@@ -212,7 +192,6 @@ const GitHubAPI = {
         return stats;
     },
 
-    // Process user events for activity timeline
     processEvents(events) {
         const processedEvents = [];
         const eventTypes = {
@@ -242,7 +221,6 @@ const GitHubAPI = {
         return processedEvents;
     },
 
-    // Clear cache
     clearCache() {
         this.cache.clear();
         console.log('Cache cleared');

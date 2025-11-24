@@ -102,6 +102,129 @@
                 </div>
             </section>
 
+            <!-- Developer Score Section -->
+            <section id="developerScoreSection" class="developer-score-section" style="display: none;">
+                <h2 class="section-title">Developer Score</h2>
+                <div class="score-container">
+                    <div class="score-main glass-card">
+                        <div class="score-circle">
+                            <svg class="score-svg" width="200" height="200">
+                                <circle cx="100" cy="100" r="90" stroke="#e5e7eb" stroke-width="12" fill="none"></circle>
+                                <circle id="scoreProgress" cx="100" cy="100" r="90" stroke="#6366f1" stroke-width="12" fill="none"
+                                    stroke-dasharray="565" stroke-dashoffset="565" stroke-linecap="round"
+                                    transform="rotate(-90 100 100)"></circle>
+                            </svg>
+                            <div class="score-text">
+                                <span id="scoreValue" class="score-number">0</span>
+                                <span id="scoreLevel" class="score-level">Calculating...</span>
+                            </div>
+                        </div>
+                        <div class="score-details">
+                            <h3 class="score-percentile">Top <span id="scorePercentile">-</span>% of developers</h3>
+                            <div class="score-breakdown">
+                                <div class="score-item">
+                                    <span class="score-label">Impact</span>
+                                    <div class="score-bar">
+                                        <div id="impactBar" class="score-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span id="impactScore" class="score-mini">0</span>
+                                </div>
+                                <div class="score-item">
+                                    <span class="score-label">Expertise</span>
+                                    <div class="score-bar">
+                                        <div id="expertiseBar" class="score-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span id="expertiseScore" class="score-mini">0</span>
+                                </div>
+                                <div class="score-item">
+                                    <span class="score-label">Consistency</span>
+                                    <div class="score-bar">
+                                        <div id="consistencyBar" class="score-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span id="consistencyScore" class="score-mini">0</span>
+                                </div>
+                                <div class="score-item">
+                                    <span class="score-label">Quality</span>
+                                    <div class="score-bar">
+                                        <div id="qualityBar" class="score-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span id="qualityScore" class="score-mini">0</span>
+                                </div>
+                                <div class="score-item">
+                                    <span class="score-label">Growth</span>
+                                    <div class="score-bar">
+                                        <div id="growthBar" class="score-fill" style="width: 0%"></div>
+                                    </div>
+                                    <span id="growthScore" class="score-mini">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="badges-container glass-card">
+                        <h3 class="badges-title">Achievements</h3>
+                        <div id="badgesList" class="badges-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Career Insights Section -->
+            <section id="careerInsightsSection" class="career-insights-section" style="display: none;">
+                <h2 class="section-title">Career Insights & Recommendations</h2>
+                <div class="insights-grid">
+                    <div class="insight-card glass-card">
+                        <h3 class="insight-title">Your Strengths</h3>
+                        <div id="strengthsList" class="strengths-list"></div>
+                    </div>
+                    <div class="insight-card glass-card">
+                        <h3 class="insight-title">Recommendations</h3>
+                        <div id="recommendationsList" class="recommendations-list"></div>
+                    </div>
+                    <div class="insight-card glass-card">
+                        <h3 class="insight-title">Skill Gaps</h3>
+                        <div id="skillGapsList" class="skill-gaps-list"></div>
+                    </div>
+                    <div class="insight-card glass-card">
+                        <h3 class="insight-title">Learning Plan</h3>
+                        <div id="learningPlan" class="learning-plan"></div>
+                    </div>
+                    <div class="insight-card glass-card full-width">
+                        <h3 class="insight-title">Career Path</h3>
+                        <div id="careerPath" class="career-path"></div>
+                    </div>
+                    <div class="insight-card glass-card full-width">
+                        <h3 class="insight-title">Market Alignment</h3>
+                        <div id="marketAlignment" class="market-alignment"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contribution Patterns Section -->
+            <section id="contributionPatternsSection" class="patterns-section" style="display: none;">
+                <h2 class="section-title">Contribution Patterns</h2>
+                <div class="patterns-grid">
+                    <div class="pattern-card glass-card">
+                        <h3 class="pattern-title">Activity Timeline</h3>
+                        <div id="activityTimeline" class="activity-timeline"></div>
+                    </div>
+                    <div class="pattern-card glass-card">
+                        <h3 class="pattern-title">Coding Schedule</h3>
+                        <div id="codingSchedule" class="coding-schedule"></div>
+                    </div>
+                    <div class="pattern-card glass-card">
+                        <h3 class="pattern-title">Language Evolution</h3>
+                        <div id="languageEvolution" class="language-evolution"></div>
+                    </div>
+                    <div class="pattern-card glass-card">
+                        <h3 class="pattern-title">Collaboration Style</h3>
+                        <div id="collaborationStyle" class="collaboration-style"></div>
+                    </div>
+                    <div class="pattern-card glass-card full-width">
+                        <h3 class="pattern-title">Pattern Insights</h3>
+                        <div id="patternInsights" class="pattern-insights"></div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Statistics Section -->
             <section class="stats-section">
                 <h2 class="section-title">Repository Statistics</h2>
@@ -192,6 +315,10 @@
     <script src="js/ui.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/export.js"></script>
+    <script src="js/scoring.js"></script>
+    <script src="js/insights.js"></script>
+    <script src="js/patterns.js"></script>
+    <script src="js/ui-enhanced.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

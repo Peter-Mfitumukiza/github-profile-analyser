@@ -1,9 +1,4 @@
-/* ===============================================
-   CAREER INSIGHTS & RECOMMENDATIONS
-   =============================================== */
-
 const CareerInsights = {
-    // Technology relationships and progression paths
     techStack: {
         'JavaScript': {
             related: ['TypeScript', 'Node.js', 'React', 'Vue', 'Angular'],
@@ -55,7 +50,6 @@ const CareerInsights = {
         }
     },
 
-    // Market demand trends (simplified, would ideally pull from job market APIs)
     marketTrends: {
         hot: ['TypeScript', 'Python', 'Go', 'Rust', 'Kubernetes', 'React', 'Machine Learning'],
         growing: ['Flutter', 'Svelte', 'Deno', 'WebAssembly', 'GraphQL', 'Terraform'],
@@ -63,7 +57,6 @@ const CareerInsights = {
         emerging: ['Bun', 'Astro', 'Qwik', 'Tauri', 'WASM']
     },
 
-    // Generate career insights based on profile analysis
     generateInsights(user, repos, languages, score, stats) {
         const insights = {
             strengths: this.identifyStrengths(languages, repos, score),
@@ -77,74 +70,60 @@ const CareerInsights = {
         return insights;
     },
 
-    // Identify developer strengths
     identifyStrengths(languages, repos, score) {
         const strengths = [];
 
-        // Language expertise
         const primaryLang = languages[0];
         if (primaryLang && primaryLang.percentage > 40) {
             strengths.push({
                 type: 'expertise',
                 title: `${primaryLang.name} Specialist`,
-                description: `Strong expertise in ${primaryLang.name} (${primaryLang.percentage}% of codebase)`,
-                icon: '🎯'
+                description: `Strong expertise in ${primaryLang.name} (${primaryLang.percentage}% of codebase)`
             });
         }
 
-        // Polyglot developer
         if (languages.length >= 5) {
             strengths.push({
                 type: 'versatility',
                 title: 'Polyglot Developer',
-                description: `Proficient in ${languages.length} programming languages`,
-                icon: '🌍'
+                description: `Proficient in ${languages.length} programming languages`
             });
         }
 
-        // High impact
         if (score.breakdown.impact > 70) {
             strengths.push({
                 type: 'impact',
                 title: 'High Impact Contributor',
-                description: 'Your projects have significant community impact',
-                icon: '⚡'
+                description: 'Your projects have significant community impact'
             });
         }
 
-        // Quality focus
         if (score.breakdown.quality > 70) {
             strengths.push({
                 type: 'quality',
                 title: 'Quality-Focused Developer',
-                description: 'Strong emphasis on code quality and documentation',
-                icon: '✨'
+                description: 'Strong emphasis on code quality and documentation'
             });
         }
 
-        // Consistency
         if (score.breakdown.consistency > 70) {
             strengths.push({
                 type: 'consistency',
                 title: 'Consistent Contributor',
-                description: 'Regular activity and project maintenance',
-                icon: '🔄'
+                description: 'Regular activity and project maintenance'
             });
         }
 
         return strengths;
     },
 
-    // Generate personalized recommendations
     generateRecommendations(languages, repos, user) {
         const recommendations = [];
         const primaryLang = languages[0]?.name;
 
-        // Language progression recommendations
         if (primaryLang && this.techStack[primaryLang]) {
             const tech = this.techStack[primaryLang];
 
-            // Recommend advanced topics
             if (tech.advanced && tech.advanced.length > 0) {
                 const notLearned = tech.advanced.filter(t =>
                     !languages.some(l => l.name.toLowerCase().includes(t.toLowerCase()))
@@ -156,13 +135,11 @@ const CareerInsights = {
                         priority: 'high',
                         title: `Learn ${notLearned[0]}`,
                         description: `Based on your ${primaryLang} expertise, ${notLearned[0]} would be a natural progression`,
-                        action: `Start with ${notLearned[0]} tutorials and build a practice project`,
-                        icon: '📚'
+                        action: `Start with ${notLearned[0]} tutorials and build a practice project`
                     });
                 }
             }
 
-            // Recommend complementary technologies
             if (tech.complementary && languages.length < 3) {
                 const complement = tech.complementary.find(t =>
                     !languages.some(l => l.name === t)
@@ -174,14 +151,12 @@ const CareerInsights = {
                         priority: 'medium',
                         title: `Add ${complement} to your skillset`,
                         description: `${complement} complements ${primaryLang} well for full-stack development`,
-                        action: `Create a project combining ${primaryLang} and ${complement}`,
-                        icon: '🔧'
+                        action: `Create a project combining ${primaryLang} and ${complement}`
                     });
                 }
             }
         }
 
-        // Repository recommendations
         const avgStars = repos.length > 0 ?
             repos.reduce((sum, r) => sum + r.stargazers_count, 0) / repos.length : 0;
 
@@ -191,12 +166,10 @@ const CareerInsights = {
                 priority: 'medium',
                 title: 'Increase project visibility',
                 description: 'Your projects could benefit from better documentation and promotion',
-                action: 'Add comprehensive READMEs, demos, and share on social media',
-                icon: '📢'
+                action: 'Add comprehensive READMEs, demos, and share on social media'
             });
         }
 
-        // Open source contribution
         const forkCount = repos.filter(r => r.fork).length;
         if (forkCount < repos.length * 0.1) {
             recommendations.push({
@@ -204,24 +177,20 @@ const CareerInsights = {
                 priority: 'medium',
                 title: 'Contribute to open source',
                 description: 'Increase your visibility by contributing to popular projects',
-                action: `Find ${primaryLang} projects on GitHub with "good first issue" labels`,
-                icon: '🤝'
+                action: `Find ${primaryLang} projects on GitHub with "good first issue" labels`
             });
         }
 
-        // Portfolio improvement
         if (repos.filter(r => r.description).length < repos.length * 0.7) {
             recommendations.push({
                 type: 'portfolio',
                 priority: 'high',
                 title: 'Improve repository descriptions',
                 description: 'Add descriptions to make your portfolio more professional',
-                action: 'Write clear, concise descriptions for all repositories',
-                icon: '📝'
+                action: 'Write clear, concise descriptions for all repositories'
             });
         }
 
-        // Hot technology recommendation
         const hotTech = this.marketTrends.hot.find(tech =>
             !languages.some(l => l.name.toLowerCase().includes(tech.toLowerCase())) &&
             !repos.some(r => r.name.toLowerCase().includes(tech.toLowerCase()))
@@ -233,15 +202,13 @@ const CareerInsights = {
                 priority: 'high',
                 title: `Explore ${hotTech}`,
                 description: `${hotTech} is in high demand in the job market`,
-                action: `Build a project using ${hotTech} to stay competitive`,
-                icon: '🔥'
+                action: `Build a project using ${hotTech} to stay competitive`
             });
         }
 
         return recommendations.slice(0, 5); // Return top 5 recommendations
     },
 
-    // Identify skill gaps
     identifySkillGaps(languages, repos) {
         const gaps = [];
         const hasBackend = languages.some(l =>
@@ -292,7 +259,6 @@ const CareerInsights = {
             });
         }
 
-        // Testing
         const hasTests = repos.some(r =>
             r.name.toLowerCase().includes('test') ||
             r.description?.toLowerCase().includes('test')
@@ -309,7 +275,6 @@ const CareerInsights = {
         return gaps;
     },
 
-    // Suggest career path
     suggestCareerPath(languages, score, repos) {
         const paths = [];
         const primaryLang = languages[0]?.name;
@@ -318,14 +283,12 @@ const CareerInsights = {
         if (primaryLang && this.techStack[primaryLang]) {
             const roles = this.techStack[primaryLang].roles;
 
-            // Current position estimate
             const currentPosition = {
                 level: level,
                 specialization: primaryLang,
                 estimatedRole: roles[0]
             };
 
-            // Short term (6 months)
             paths.push({
                 timeframe: 'Short-term (6 months)',
                 goal: `Senior ${roles[0]}`,
@@ -336,7 +299,6 @@ const CareerInsights = {
                 ]
             });
 
-            // Medium term (1-2 years)
             paths.push({
                 timeframe: 'Medium-term (1-2 years)',
                 goal: roles[1] || 'Tech Lead',
@@ -347,7 +309,6 @@ const CareerInsights = {
                 ]
             });
 
-            // Long term (3-5 years)
             paths.push({
                 timeframe: 'Long-term (3-5 years)',
                 goal: 'Architecture/Management',
@@ -370,7 +331,6 @@ const CareerInsights = {
         };
     },
 
-    // Create personalized learning plan
     createLearningPlan(languages, repos) {
         const plan = {
             immediate: [],
@@ -380,7 +340,6 @@ const CareerInsights = {
 
         const primaryLang = languages[0]?.name;
 
-        // Immediate (this month)
         plan.immediate = [
             {
                 task: 'Improve documentation',
@@ -394,7 +353,6 @@ const CareerInsights = {
             }
         ];
 
-        // Short-term (3 months)
         if (primaryLang && this.techStack[primaryLang]) {
             const related = this.techStack[primaryLang].related[0];
             plan.shortTerm.push({
@@ -410,7 +368,6 @@ const CareerInsights = {
             effort: '40-50 hours'
         });
 
-        // Long-term (6-12 months)
         plan.longTerm = [
             {
                 task: 'Contribute to major OSS',
@@ -427,26 +384,23 @@ const CareerInsights = {
         return plan;
     },
 
-    // Assess market alignment
     assessMarketAlignment(languages, repos) {
         let alignmentScore = 0;
         const insights = [];
 
-        // Check hot technologies
         languages.forEach(lang => {
             if (this.marketTrends.hot.includes(lang.name)) {
                 alignmentScore += 25;
-                insights.push(`✅ ${lang.name} is in high demand`);
+                insights.push(`${lang.name} is in high demand`);
             } else if (this.marketTrends.growing.includes(lang.name)) {
                 alignmentScore += 15;
-                insights.push(`📈 ${lang.name} is growing in popularity`);
+                insights.push(`${lang.name} is growing in popularity`);
             } else if (this.marketTrends.stable.includes(lang.name)) {
                 alignmentScore += 10;
-                insights.push(`💪 ${lang.name} has stable demand`);
+                insights.push(`${lang.name} has stable demand`);
             }
         });
 
-        // Check for emerging tech
         const hasEmerging = repos.some(r =>
             this.marketTrends.emerging.some(tech =>
                 r.name.toLowerCase().includes(tech.toLowerCase())
@@ -455,7 +409,7 @@ const CareerInsights = {
 
         if (hasEmerging) {
             alignmentScore += 20;
-            insights.push('🚀 You\'re exploring emerging technologies');
+            insights.push('Exploring emerging technologies');
         }
 
         return {
