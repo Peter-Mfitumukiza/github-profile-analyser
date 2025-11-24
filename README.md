@@ -173,17 +173,17 @@ The developer score (0-100) is calculated using five weighted categories:
 
 To deploy on Web01 and Web02 servers:
 
-1. **Upload files** to your web server:
+1. **Upload files**:
 ```bash
-scp -r portfolio-analyzer/ user@web01:/var/www/html/
-scp -r portfolio-analyzer/ user@web02:/var/www/html/
+scp -r portfolio-analyzer/ ubuntu@18.207.214.35:/var/www/html/
+scp -r portfolio-analyzer/ ubuntu@3.86.236.240:/var/www/html/
 ```
 
-2. **Configure Nginx** (example configuration):
+2. **Configure Nginx**:
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;
+    server_name 18.207.214.35;
     root /var/www/html/portfolio-analyzer;
     index index.html;
 
@@ -199,42 +199,28 @@ server {
 }
 ```
 
-3. **Load Balancer Configuration** (for Lb01):
-```nginx
-upstream portfolio_app {
-    server web01:80;
-    server web02:80;
-}
+3. **Load Balancer Configuration** :
 
-server {
-    listen 80;
-    server_name load-balancer.com;
+```haproxy
+global
+    daemon
+    maxconn 256
 
-    location / {
-        proxy_pass http://portfolio_app;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
+defaults
+    mode http
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
+
+frontend web_frontend
+    bind *:80
+    default_backend web_servers
+
+backend web_servers
+    balance roundrobin
+    server web01 18.207.214.35:80 check
+    server web02 3.86.236.240:80 check
 ```
-
-### GitHub Pages Deployment
-
-1. Push to GitHub repository
-2. Go to Settings > Pages
-3. Select source branch (main/master)
-4. Access at: `https://yourusername.github.io/portfolio-analyzer/`
-
-## Features Roadmap
-
-- [ ] GitHub OAuth integration for higher rate limits
-- [ ] Dark mode toggle
-- [ ] Contribution activity heatmap
-- [ ] Code quality metrics
-- [ ] Repository comparison tool
-- [ ] Team/organization analysis
-- [ ] CSV export option
-- [ ] Progressive Web App (PWA) support
 
 ## Troubleshooting
 
