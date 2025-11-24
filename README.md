@@ -1,6 +1,6 @@
 # GitHub Portfolio Analyzer
 
-A professional web application that analyzes GitHub profiles and provides quantified developer insights, career recommendations, and contribution patterns. Built with vanilla JavaScript, HTML, and CSS - no backend required.
+A professional web application that analyzes GitHub profiles and provides quantified developer insights, career recommendations, and contribution patterns. Built with vanilla JavaScript, HTML, and CSS.
 
 ## Features
 
@@ -25,7 +25,7 @@ A professional web application that analyzes GitHub profiles and provides quanti
 - **Professional PDF Export**: Includes score, insights, and recommendations
 
 ### User Interface
-- **Clean, Professional Design**: Minimal UI without gamification elements
+- **Clean, Professional Design**: Minimal UI
 - **Responsive Layout**: Works perfectly on desktop, tablet, and mobile devices
 - **Smooth Animations**: Subtle transitions and loading states
 - **Single Accent Color**: Consistent indigo theme throughout
@@ -42,7 +42,7 @@ A professional web application that analyzes GitHub profiles and provides quanti
 1. Clone or download this repository:
 ```bash
 git clone https://github.com/Peter-Mfitumukiza/github-profile-analyser.git
-cd github-profile-analyzer
+cd github-profile-analyser
 ```
 
 2. Open `index.html` in your web browser:
