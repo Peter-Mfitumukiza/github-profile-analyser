@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+bower_components/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# API Keys and Credentials
+config.js
+secrets.js
+credentials.json
+*.key
+*.pem
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+
+# Cache
+.cache/
+.temp/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Personal notes
+TODO.md
+NOTES.md
+personal/
