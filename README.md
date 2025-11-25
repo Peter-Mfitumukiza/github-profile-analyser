@@ -8,6 +8,8 @@ Watch the application in action:
 
 **[Video Demo on YouTube](https://www.youtube.com/watch?v=EEfYxlajgqA)**
 
+Try it yourself: **[http://54.166.247.110](http://54.166.247.110)**
+
 See how the analyzer processes GitHub profiles, generates developer scores, provides career insights, and creates professional portfolio exports.
 
 ## Features
